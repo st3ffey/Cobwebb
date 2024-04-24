@@ -1,5 +1,5 @@
-from src.embeddings import embed, co
-from configs.config import index
+from backend.embedding import embed
+from configs.config import index, co
 import openai
 
 # Initialize the conversation history
@@ -52,7 +52,12 @@ def generate_alternative_question(query):
     alternative_question = response.choices[0].message.content
     return alternative_question
 
-def get_chat_response(query, top_k=25, top_n=8):
+def get_chat_response(query, top_k=25, top_n=8, clear_history=False):
+    global conversation_history
+
+    if clear_history:
+        conversation_history=[]
+        
     # Generate alternative question
     alternative_question = generate_alternative_question(query)
     
