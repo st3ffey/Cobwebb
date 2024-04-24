@@ -57,7 +57,7 @@ def get_chat_response(query, top_k=25, top_n=8):
     alternative_question = generate_alternative_question(query)
     
     # Combine the original query and alternative question
-    expanded_query = query + ". In other terms," + alternative_question
+    expanded_query = query + ". In other terms, " + alternative_question
     print(expanded_query)
     
     # Perform document retrieval using the expanded query
