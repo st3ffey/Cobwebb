@@ -1,3 +1,5 @@
-fastapi
 uvicorn
 openai
+pypdf2 
+pinecone-client 
+cohere

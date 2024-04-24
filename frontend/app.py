@@ -23,7 +23,7 @@ def faq():
 def chat_api():
     query = request.json['query']
     clear_history = request.json.get('clear_history', False)
-    response, citations = get_chat_response(query)
+    response, citations = get_chat_response(query, clear_history=clear_history)
     return jsonify({'response': response, 'citations': citations})
 
 if __name__ == '__main__':
