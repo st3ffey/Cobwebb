@@ -18,7 +18,7 @@ function sendQuery() {
         // Display user query in the current conversation
         const userQueryElement = document.createElement('div');
         userQueryElement.classList.add('user-message');
-        userQueryElement.textContent = `User: ${query}`;
+        userQueryElement.innerHTML = `<strong>You:</strong> ${query}`;
         currentConversation.appendChild(userQueryElement);
 
         // Display loading message in the current conversation
@@ -43,7 +43,7 @@ function sendQuery() {
             // Display the response in the current conversation
             const responseElement = document.createElement('div');
             responseElement.classList.add('assistant-message');
-            responseElement.innerHTML = `<strong>Assistant:</strong><br>${formatResponse(data.response)}`;
+            responseElement.innerHTML = `<strong>Cobwebb:</strong><br>${formatResponse(data.response)}`;
             currentConversation.appendChild(responseElement);
 
             // Add the current conversation to the conversation history
@@ -79,13 +79,13 @@ function sendQuery() {
 function clearChat() {
     // Clear the current conversation
     currentConversation.innerHTML = '';
-  
+
     // Clear the citation history
     citationHistory.innerHTML = '<h4>Citation History</h4>';
-  
+
     // Clear the input field
     queryInput.value = '';
-  
+
     // Clear the conversation history
     conversation_history.length = 0;
   }
