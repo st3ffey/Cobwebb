@@ -8,36 +8,35 @@
 </head>
 <body>
   <div class="container mt-5">
-    <h1 class="text-center mb-4">Cobwebb Chat</h1>
+    <h1 class="text-center mb-4">Cobwebb <img src="{{ url_for('static', filename='img/cobwebblogo.png') }}" alt="Cobwebb Logo" style="height: 50px;"> Chat</h1>
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-12">
         <div id="chat-container">
-          <div id="current-conversation" class="mb-3">
-            <!-- Current question and answer will be dynamically populated here -->
-          </div>
-          <div id="user-input" class="input-group">
-            <input type="text" id="query-input" class="form-control" placeholder="Enter your query!">
-            <div class="input-group-append">
-              <button id="send-button" class="btn btn-primary">Send</button>
-              <button id="clear-button" class="btn btn-danger">Clear Chat</button>
+            <h4>Current Conversation</h4>
+            <div id="current-conversation" class="mb-3">
             </div>
-          </div>
+            <div id="user-input" class="input-group mt-auto">
+              <input type="text" id="query-input" class="form-control" placeholder="Enter your query!">
+              <div class="input-group-append">
+                <button id="send-button" class="btn btn-primary">Send</button>
+                <button id="clear-button" class="btn btn-danger">Clear Chat</button>
+              </div>
+            </div>
         </div>
       </div>
-      <div class="col-md-6">
-        <div id="citation-history">
+      <div class="col-md-12">
+        <div id="citation-history" class="mt-4">
           <h4>Citation History</h4>
-          <!-- Citation history will be dynamically populated here -->
         </div>
       </div>
     </div>
   </div>
   <script src="{{ url_for('static', filename='js/app.js') }}"></script>
-</body>
-</html>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-bottom">
-    <a class="navbar-brand" href="#">Cobwebb</a>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-bottom">
+    <a class="navbar-brand" href="#">
+      <img src="{{ url_for('static', filename='img/sblogo.png') }}" alt="Semler Brossy Logo" height="30" class="d-inline-block align-top"> Cobwebb
+    </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -55,3 +54,5 @@
       </ul>
     </div>
   </nav>
+</body>
+</html>
