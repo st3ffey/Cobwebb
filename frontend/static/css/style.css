@@ -1,35 +1,87 @@
 body {
-    font-family: Courier New, monospace;
-    background-color: #dde1e6;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #ebebeb;
+  min-height: 100%;
+  padding-right: 15px;
+  padding-bottom: 50px;
+  position: relative;
+  overflow: hidden;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('../img/spider.png') no-repeat center center;
+    background-size: cover;
+    opacity: 0.15;
+    z-index: -1;
+}
+
+html {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.home-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
 }
 
 .container {
-    max-width: 1200px;
+  max-width: 1400px;
+  display: flex;
+  flex-direction: column;
 }
 
 #chat-container {
-    background-color: #f7f7f7;
-    border-radius: 5px;
-    padding: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    height: 600px;
-    overflow-y: auto;
+  background-color: #f7f7f7;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 50px;
 }
 
 #current-conversation {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  flex-grow: 1;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  overflow-y: auto;
+  padding-bottom: 50px;
+}
+
+#user-input {
+  margin-top: auto;
+}
+
+#send-button {
+  margin-right: 5px;
+}
+
+.input-group-append .btn {
+  height: 38px;
 }
 
 #citation-history {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 5px;
-    max-height: 600px;
-    overflow-y: auto;
-  }
+  background-color: #f8f9fa;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  max-height: 400px;
+  overflow-y: auto;
+  margin-bottom: 50px;;
+}
 
 .history-item {
     margin-bottom: 10px;
@@ -40,6 +92,7 @@ body {
 .user-message {
     background-color: #b2ceee;
     padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     margin-bottom: 10px;
 }
@@ -47,6 +100,7 @@ body {
 .assistant-message {
     background-color: #d1ecf1;
     padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     margin-bottom: 10px;
 }
@@ -55,8 +109,10 @@ body {
     background-color: #f8f9fa;
     padding: 10px;
     border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     margin-bottom: 10px;
     font-size: 14px;
+    padding-bottom: 50px;
 }
 
 .loading-message {
@@ -77,11 +133,40 @@ body {
     font-weight: bold;
 }
 
+.faq-container {
+  overflow-y: auto;
+  padding-right: 15px;
+}
+
+.chat-button {
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-light.bg-light {
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+h1 {
+    font-size: 44px;
+    font-weight: bold;
+    font-family: Montserrat
+}
+
+h1 {
+    animation: fadeIn 2s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 h2 {
     margin-top: 30px;
     margin-bottom: 10px;
   }
-  
+
   p {
     margin-bottom: 20px;
   }
