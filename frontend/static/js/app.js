@@ -24,7 +24,20 @@ function sendQuery() {
         // Display loading message in the current conversation
         const loadingElement = document.createElement('div');
         loadingElement.classList.add('loading-message');
-        loadingElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Retrieving response...';
+
+        // Create the loader element with custom animation
+        const loader = document.createElement('div');
+        loader.className = 'loader --9';
+
+        // Add loader to the loading message container
+        loadingElement.appendChild(loader);
+
+        // Optional: Add text message if needed
+        const textNode = document.createElement('span');
+        textNode.textContent = ' Retrieving response...';
+        loadingElement.appendChild(textNode);
+
+        // Append the loading message to the conversation
         currentConversation.appendChild(loadingElement);
 
         // Send POST request to the backend API

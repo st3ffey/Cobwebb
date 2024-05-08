@@ -1,38 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cobwebb Demo</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div class="home-container">
-    <h1 class="text-center mb-4">Welcome to Cobwebb <img src="{{ url_for('static', filename='img/cobwebblogo.png') }}" alt="Cobwebb Logo" style="height: 50px;"></h1>
-    <p>Cobwebb can answer your questions and provide helpful information about proxies.</p>
-    <p>For more info, refer to FAQ at the bottom of this page.</p>
-    <a href="/chat" class="btn btn-primary btn-lg chat-button">Start Chatting</a>
-  </div>
+    <header class="home-container">
+        <h1>Welcome to Cobwebb</h1>
+        <img src="img/cobwebblogo.png" alt="Cobwebb Logo" class="logo">
+        <p>Cobwebb can answer your questions and provide helpful information about proxies.</p>
+        <p>For more info, refer to FAQ at the bottom of this page.</p>
+        <a href="/chat" class="btn btn-primary btn-lg">Start Chatting</a>
+    </header>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="img/sblogo.png" alt="Semler Brossy Logo"> Cobwebb
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item active"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/chat">Chat</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/faq">FAQ</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 </body>
 </html>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-bottom">
-  <a class="navbar-brand" href="#">
-    <img src="{{ url_for('static', filename='img/sblogo.png') }}" alt="Semler Brossy Logo" height="30" class="d-inline-block align-top"> Cobwebb
-  </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="/">Home</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/chat">Chat</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/faq">FAQ</a>
-      </li>
-    </ul>
-  </div>
-</nav>

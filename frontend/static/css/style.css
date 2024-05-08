@@ -1,3 +1,8 @@
+:root {
+  --size-dot: 1.2vmin;
+  --color: #202429;
+}
+
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #ebebeb;
@@ -122,8 +127,41 @@ html {
     color: #a8a8a8;
 }
 
-.loading-message .fa-spinner {
-    margin-right: 5px;
+.loader.--9::before,
+.loader.--9::after {
+    width: var(--size-dot);
+    height: var(--size-dot);
+    border-radius: 50%;
+    background-color: var(--color);
+    position: absolute;
+    content: "";
+    top: 50%;
+    transform: translateY(-50%);
+    animation: loader-9 0.58s cubic-bezier(0.39, 0.31, 0, 1.11) infinite;
+}
+
+.loader.--9::before {
+    left: calc(50% - var(--size-dot) - 1.6vmin);
+}
+
+.loader.--9::after {
+    left: calc(50% + 1.6vmin);
+    animation-delay: 0.5s;
+}
+
+@keyframes loader-9 {
+    0%, 100% {
+        opacity: 0;
+    }
+    0% {
+        transform: translate(-4vmin, -50%);
+    }
+    66% {
+        opacity: 1;
+    }
+    66%, 100% {
+        transform: translateY(-50%);
+    }
 }
 
 .error-message {
@@ -154,7 +192,7 @@ h1 {
 }
 
 h1 {
-    animation: fadeIn 2s ease-in-out;
+    animation: fadeIn 1.4s ease-in-out;
 }
 
 @keyframes fadeIn {
@@ -170,3 +208,5 @@ h2 {
   p {
     margin-bottom: 20px;
   }
+
+
