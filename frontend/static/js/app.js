@@ -4,6 +4,7 @@ const citationHistory = document.getElementById('citation-history');
 const queryInput = document.getElementById('query-input');
 const sendButton = document.getElementById('send-button');
 const clearButton = document.getElementById('clear-button');
+const nextButton = document.getElementById('next-button');
 
 // Event listener for send button click
 sendButton.addEventListener('click', sendQuery);
@@ -11,10 +12,19 @@ sendButton.addEventListener('click', sendQuery);
 // Event listener for clear button click
 clearButton.addEventListener('click', clearChat);
 
-// Function to send user query to the backend API
+// Add the current page state
+let currentPage = 0;
+
+// Event listener for Next button click
+nextButton.addEventListener('click', fetchNextPage);
+
+// Function to send user query to the backend
 function sendQuery() {
     const query = queryInput.value.trim();
     if (query !== '') {
+        // Reset the current page
+        currentPage = 0;
+
         // Display user query in the current conversation
         const userQueryElement = document.createElement('div');
         userQueryElement.classList.add('user-message');
@@ -46,7 +56,7 @@ function sendQuery() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ query: query })
+            body: JSON.stringify({ query: query, clear_history: true })
         })
         .then(response => response.json())
         .then(data => {
@@ -82,10 +92,71 @@ function sendQuery() {
             currentConversation.removeChild(loadingElement);
             // Display error message in the current conversation
             const errorElement = document.createElement('div');
-            errorElement.classList.add('error-message');            errorElement.textContent = 'Oops! Something went wrong. Please try again.';
+            errorElement.classList.add('error-message');
+            errorElement.textContent = 'Oops! Something went wrong. Please try again.';
             currentConversation.appendChild(errorElement);
         });
     }
+}
+
+// Function to fetch the next page of responses
+function fetchNextPage() {
+    const query = queryInput.value.trim();
+
+    // Display loading message in the current conversation
+    const loadingElement = document.createElement('div');
+    loadingElement.classList.add('loading-message');
+
+    // Create the loader element with custom animation
+    const loader = document.createElement('div');
+    loader.className = 'loader --9';
+
+    // Add loader to the loading message container
+    loadingElement.appendChild(loader);
+
+    // Optional: Add text message if needed
+    const textNode = document.createElement('span');
+    textNode.textContent = ' Retrieving response...';
+    loadingElement.appendChild(textNode);
+
+    // Append the loading message to the conversation
+    currentConversation.appendChild(loadingElement);
+
+    // Send POST request to the backend API
+    fetch('/api/next', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ query: query })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Remove the loading message from the current conversation
+        currentConversation.removeChild(loadingElement);
+
+        // Display the response in the current conversation
+        const responseElement = document.createElement('div');
+        responseElement.classList.add('assistant-message');
+        responseElement.innerHTML = `<strong>Cobwebb:</strong><br>${formatResponse(data.response)}`;
+        currentConversation.appendChild(responseElement);
+
+        // Display the citations in the citation history
+        const citationsElement = document.createElement('div');
+        citationsElement.classList.add('citation-item');
+        citationsElement.innerHTML = `<strong>Citations:</strong><br>${formatCitations(data.citations)}`;
+        citationHistory.appendChild(citationsElement);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Remove the loading message from the current conversation on error
+        currentConversation.removeChild(loadingElement);
+        // Display error message in the current conversation
+        const errorElement = document.createElement('div');
+        errorElement.classList.add('error-message');
+        errorElement.textContent = 'Oops! Something went wrong. Please try again.';
+        currentConversation.appendChild(errorElement);
+    });
 }
 
 // Function to clear the chat
@@ -111,4 +182,4 @@ function formatResponse(response) {
 // Function to format the citations
 function formatCitations(citations) {
     return citations.replace(/\n/g, '<br>');
-}
+}\

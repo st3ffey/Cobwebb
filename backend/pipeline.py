@@ -2,10 +2,12 @@ from backend.embedding import embed
 from configs.config import index, co
 import openai
 
-# Initialize the conversation history
+# Initialize the conversation history and keep track of remaining documents/data
 conversation_history = []
+remaining_docs = []
+remaining_metadata = []
 
-def get_docs(query: str, top_k: int):
+def get_docs(query, top_k):
     # encode query
     xq = embed([query])[0]
 
@@ -53,16 +55,16 @@ def generate_alternative_question(query):
     alternative_question = response.choices[0].message.content
     return alternative_question
 
-def get_chat_response(query, top_k=30, top_n=9, clear_history=False):
-    global conversation_history
+def get_chat_response(query, top_k=30, top_n=10, clear_history=False):
+    global conversation_history, remaining_docs, remaining_metadata
 
     if clear_history:
-        conversation_history=[]
+        conversation_history = []
+        remaining_docs = []
+        remaining_metadata = []
 
-    # Generate alternative question
+    # Generate alternative question and combine
     alternative_question = generate_alternative_question(query)
-
-    # Combine the original query and alternative question
     expanded_query = query + ". In other terms, " + alternative_question
     print(expanded_query)
 
@@ -73,10 +75,14 @@ def get_chat_response(query, top_k=30, top_n=9, clear_history=False):
     documents = [doc["chunk_text"] for doc in docs]
     metadata = [doc["metadata"] for doc in docs]
 
-    # Rerank the documents
+    # Store the remaining documents and metadata
+    remaining_docs = documents[top_n:]
+    remaining_metadata = metadata[top_n:]
+
+    # Rerank the initial set of documents
     rerank_docs = co.rerank(
         query=query,
-        documents=documents,
+        documents=documents[:top_n],
         top_n=top_n,
         model="rerank-english-v3.0"
     )
@@ -94,5 +100,37 @@ def get_chat_response(query, top_k=30, top_n=9, clear_history=False):
 
     # Append the user's query and the model's response to the conversation history
     conversation_history.append((query, response))
+
+    return response, citations
+
+def get_next_set(query, top_n=10):
+    global remaining_docs, remaining_metadata
+
+    if len(remaining_docs) < top_n:
+        # If there are not enough remaining documents
+        return "I couldn't find any more information that is relevant enough to your question.", ""
+
+    # Rerank the next set of documents
+    rerank_docs = co.rerank(
+        query=query,
+        documents=remaining_docs[:top_n],
+        top_n=top_n,
+        model="rerank-english-v3.0"
+    )
+    reranked_candidates = rerank_docs.results
+
+    # Get the reranked document content and metadata
+    doc_content = [remaining_docs[candidate.index] for candidate in reranked_candidates]
+    doc_metadata = [remaining_metadata[candidate.index] for candidate in reranked_candidates]
+
+    # Update the remaining documents and metadata
+    remaining_docs = remaining_docs[top_n:]
+    remaining_metadata = remaining_metadata[top_n:]
+
+    # Generate citations for the reranked documents
+    citations = "\n".join([f"{i+1}. {doc}\nMetadata: {doc_metadata[i]}" for i, doc in enumerate(doc_content)])
+
+    # Generate a response based on the reranked documents and conversation history
+    response = generate_response(query, doc_content, doc_metadata, citations, conversation_history)
 
     return response, citations
