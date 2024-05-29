@@ -12,16 +12,20 @@ sendButton.addEventListener('click', sendQuery);
 // Event listener for clear button click
 clearButton.addEventListener('click', clearChat);
 
-// Add the current page state
+// Add state-related stuff
 let currentPage = 0;
+let lastQuery = '';
 
-// Event listener for Next button click
+// Event listener for next-button click
 nextButton.addEventListener('click', fetchNextPage);
 
 // Function to send user query to the backend
 function sendQuery() {
     const query = queryInput.value.trim();
     if (query !== '') {
+        // Store the last query
+        lastQuery = query;
+
         // Reset the current page
         currentPage = 0;
 
@@ -93,7 +97,7 @@ function sendQuery() {
             // Display error message in the current conversation
             const errorElement = document.createElement('div');
             errorElement.classList.add('error-message');
-            errorElement.textContent = 'Oops! Something went wrong. Please try again.';
+            errorElement.textContent = 'Cobwebb is having trouble at the moment. Please try again later.';
             currentConversation.appendChild(errorElement);
         });
     }
@@ -101,62 +105,64 @@ function sendQuery() {
 
 // Function to fetch the next page of responses
 function fetchNextPage() {
-    const query = queryInput.value.trim();
+    const query = lastQuery; // Use the last query stored
 
-    // Display loading message in the current conversation
-    const loadingElement = document.createElement('div');
-    loadingElement.classList.add('loading-message');
+    if (query !== '') {
+        // Display loading message in the current conversation
+        const loadingElement = document.createElement('div');
+        loadingElement.classList.add('loading-message');
 
-    // Create the loader element with custom animation
-    const loader = document.createElement('div');
-    loader.className = 'loader --9';
+        // Create the loader element with custom animation
+        const loader = document.createElement('div');
+        loader.className = 'loader --9';
 
-    // Add loader to the loading message container
-    loadingElement.appendChild(loader);
+        // Add loader to the loading message container
+        loadingElement.appendChild(loader);
 
-    // Optional: Add text message if needed
-    const textNode = document.createElement('span');
-    textNode.textContent = ' Retrieving response...';
-    loadingElement.appendChild(textNode);
+        // Optional: Add text message if needed
+        const textNode = document.createElement('span');
+        textNode.textContent = ' Retrieving response...';
+        loadingElement.appendChild(textNode);
 
-    // Append the loading message to the conversation
-    currentConversation.appendChild(loadingElement);
+        // Append the loading message to the conversation
+        currentConversation.appendChild(loadingElement);
 
-    // Send POST request to the backend API
-    fetch('/api/next', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ query: query })
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Remove the loading message from the current conversation
-        currentConversation.removeChild(loadingElement);
+        // Send POST request to the backend API
+        fetch('/api/next', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ query: query })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Remove the loading message from the current conversation
+            currentConversation.removeChild(loadingElement);
 
-        // Display the response in the current conversation
-        const responseElement = document.createElement('div');
-        responseElement.classList.add('assistant-message');
-        responseElement.innerHTML = `<strong>Cobwebb:</strong><br>${formatResponse(data.response)}`;
-        currentConversation.appendChild(responseElement);
+            // Display the response in the current conversation
+            const responseElement = document.createElement('div');
+            responseElement.classList.add('assistant-message');
+            responseElement.innerHTML = `<strong>Cobwebb:</strong><br>${formatResponse(data.response)}`;
+            currentConversation.appendChild(responseElement);
 
-        // Display the citations in the citation history
-        const citationsElement = document.createElement('div');
-        citationsElement.classList.add('citation-item');
-        citationsElement.innerHTML = `<strong>Citations:</strong><br>${formatCitations(data.citations)}`;
-        citationHistory.appendChild(citationsElement);
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        // Remove the loading message from the current conversation on error
-        currentConversation.removeChild(loadingElement);
-        // Display error message in the current conversation
-        const errorElement = document.createElement('div');
-        errorElement.classList.add('error-message');
-        errorElement.textContent = 'Oops! Something went wrong. Please try again.';
-        currentConversation.appendChild(errorElement);
-    });
+            // Display the citations in the citation history
+            const citationsElement = document.createElement('div');
+            citationsElement.classList.add('citation-item');
+            citationsElement.innerHTML = `<strong>Citations:</strong><br>${formatCitations(data.citations)}`;
+            citationHistory.appendChild(citationsElement);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Remove the loading message from the current conversation on error
+            currentConversation.removeChild(loadingElement);
+            // Display error message in the current conversation
+            const errorElement = document.createElement('div');
+            errorElement.classList.add('error-message');
+            errorElement.textContent = 'Cobwebb is having trouble at the moment. Please try again later.';
+            currentConversation.appendChild(errorElement);
+        });
+    }
 }
 
 // Function to clear the chat
@@ -182,4 +188,4 @@ function formatResponse(response) {
 // Function to format the citations
 function formatCitations(citations) {
     return citations.replace(/\n/g, '<br>');
-}\
+}

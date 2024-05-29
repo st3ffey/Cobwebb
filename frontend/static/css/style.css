@@ -73,6 +73,10 @@ html {
   margin-right: 5px;
 }
 
+#next-button {
+  margin-right: 5px;
+}
+
 .input-group-append .btn {
   height: 38px;
 }

@@ -108,7 +108,7 @@ def get_next_set(query, top_n=10):
 
     if len(remaining_docs) < top_n:
         # If there are not enough remaining documents
-        return "I couldn't find any more information that is relevant enough to your question.", ""
+        return "I couldn't find any more information that is relevant enough to your question. Perhaps try rephrasing slightly and trying again.", ""
 
     # Rerank the next set of documents
     rerank_docs = co.rerank(
